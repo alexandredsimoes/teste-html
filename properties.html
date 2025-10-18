@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Properties - EstateHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .navbar-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #059669, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f3f4f6;
+        }
+
+        .nav-link.active {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .cta-button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, #10b981, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 1.5rem 60px;
+            background: linear-gradient(135deg, #d1fae5, #ccfbf1, #cffafe);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.25rem;
+            color: #4b5563;
+        }
+
+        /* Properties Content */
+        .properties-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .properties-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        /* Filters Sidebar */
+        .filters-sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filters-sidebar h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #1f2937;
+        }
+
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .filter-input, .filter-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #10b981;
+        }
+
+        .filter-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #10b981, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-button:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+        }
+
+        .reset-button {
+            width: 100%;
+            padding: 0.75rem;
+            background: white;
+            color: #4b5563;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .reset-button:hover {
+            background: #f9fafb;
+        }
+
+        /* Properties Grid */
+        .properties-main {
+            min-height: 500px;
+        }
+
+        .properties-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-count {
+            font-size: 1.125rem;
+            color: #4b5563;
+        }
+
+        .sort-select {
+            padding: 0.5rem 1rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .property-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.5s;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .property-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .property-image {
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s;
+        }
+
+        .property-card:hover .property-image img {
+            transform: scale(1.1);
+        }
+
+        .property-badges {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .badge-residential {
+            background: #10b981;
+        }
+
+        .badge-commercial {
+            background: #3b82f6;
+        }
+
+        .badge-featured {
+            background: #f59e0b;
+        }
+
+        .property-content {
+            padding: 1.5rem;
+        }
+
+        .property-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .property-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #1f2937;
+        }
+
+        .property-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .property-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4b5563;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .property-features {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: #d1d5db;
+            padding: 3rem 1.5rem 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .footer h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #10b981;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-link {
+            color: #d1d5db;
+            transition: color 0.3s;
+        }
+
+        .social-link:hover {
+            color: #10b981;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .icon-lg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-menu.active {
+                display: block;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-nav-link {
+                display: block;
+                padding: 0.75rem 1rem;
+                margin-bottom: 0.5rem;
+                border-radius: 8px;
+                text-decoration: none;
+                color: #374151;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .properties-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                position: static;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="estatehub.html" class="logo">
+                <div class="logo-icon">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                </div>
+                <span class="logo-text">EstateHub</span>
+            </a>
+            <div class="nav-links">
+                <a href="estatehub.html" class="nav-link">Home</a>
+                <a href="properties.html" class="nav-link active">Properties</a>
+                <a href="agents.html" class="nav-link">Agents</a>
+                <button class="cta-button">List Property</button>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="estatehub.html" class="mobile-nav-link">Home</a>
+            <a href="properties.html" class="mobile-nav-link">Properties</a>
+            <a href="agents.html" class="mobile-nav-link">Agents</a>
+            <button class="cta-button" style="width: 100%; margin-top: 0.5rem;">List Property</button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Explore Our Properties</h1>
+        <p>Find the perfect property that matches your needs</p>
+    </section>
+
+    <!-- Properties Content -->
+    <div class="properties-content">
+        <div class="properties-layout">
+            <!-- Filters Sidebar -->
+            <aside class="filters-sidebar">
+                <h3>Filters</h3>
+                
+                <div class="filter-group">
+                    <label>Property Type</label>
+                    <select class="filter-select" id="filterType">
+                        <option value="all">All Types</option>
+                        <option value="residential">Residential</option>
+                        <option value="commercial">Commercial</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label>Location</label>
+                    <input type="text" class="filter-input" id="filterLocation" placeholder="Enter location">
+                </div>
+
+                <div class="filter-group">
+                    <label>Min Price</label>
+                    <input type="number" class="filter-input" id="filterMinPrice" placeholder="$0">
+                </div>
+
+                <div class="filter-group">
+                    <label>Max Price</label>
+                    <input type="number" class="filter-input" id="filterMaxPrice" placeholder="Any">
+                </div>
+
+                <div class="filter-group">
+                    <label>Bedrooms</label>
+                    <select class="filter-select" id="filterBedrooms">
+                        <option value="any">Any</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                        <option value="5">5+</option>
+                    </select>
+                </div>
+
+                <button class="filter-button" onclick="applyFilters()">Apply Filters</button>
+                <button class="reset-button" onclick="resetFilters()">Reset</button>
+            </aside>
+
+            <!-- Properties Grid -->
+            <main class="properties-main">
+                <div class="properties-header">
+                    <div class="results-count" id="resultsCount">Loading properties...</div>
+                    <select class="sort-select" id="sortBy" onchange="sortProperties()">
+                        <option value="default">Sort by</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="area">Area: Largest First</option>
+                    </select>
+                </div>
+                <div class="properties-grid" id="propertiesGrid">
+                    <!-- Properties will be rendered here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">
+                    <div class="footer-logo-icon">
+                        <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <path d="M3 9h18M9 21V9"/>
+                        </svg>
+                    </div>
+                    <span class="footer-logo-text">EstateHub</span>
+                </div>
+                <p style="font-size: 0.875rem; margin-bottom: 1rem;">Your trusted partner in finding the perfect property.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">📘</a>
+                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link">📷</a>
+                    <a href="#" class="social-link">💼</a>
+                </div>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="estatehub.html">Home</a></li>
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="agents.html">Agents</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Property Types</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Residential</a></li>
+                    <li><a href="#">Commercial</a></li>
+                    <li><a href="#">Luxury Estates</a></li>
+                    <li><a href="#">Office Spaces</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li>📍 123 Real Estate Ave, New York, NY 10001</li>
+                    <li>📞 +1 (555) 123-4567</li>
+                    <li>✉️ info@estatehub.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EstateHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mock Properties Data
+        const allProperties = [
+            {
+                id: '1',
+                title: 'Modern Downtown Penthouse',
+                type: 'residential',
+                price: 1250000,
+                location: 'Downtown, Manhattan',
+                bedrooms: 3,
+                bathrooms: 2,
+                area: 2400,
+                image: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800',
+                featured: true
+            },
+            {
+                id: '2',
+                title: 'Luxury Waterfront Villa',
+                type: 'residential',
+                price: 3500000,
+                location: 'Hamptons, NY',
+                bedrooms: 5,
+                bathrooms: 4,
+                area: 5200,
+                image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800',
+                featured: true
+            },
+            {
+                id: '3',
+                title: 'Prime Office Space',
+                type: 'commercial',
+                price: 2800000,
+                location: 'Financial District, NYC',
+                bedrooms: null,
+                bathrooms: 4,
+                area: 4500,
+                image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800',
+                featured: true
+            },
+            {
+                id: '4',
+                title: 'Cozy Suburban Home',
+                type: 'residential',
+                price: 650000,
+                location: 'Brooklyn Heights, NY',
+                bedrooms: 4,
+                bathrooms: 3,
+                area: 2800,
+                image: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800',
+                featured: false
+            },
+            {
+                id: '5',
+                title: 'Retail Space Downtown',
+                type: 'commercial',
+                price: 950000,
+                location: 'SoHo, Manhattan',
+                bedrooms: null,
+                bathrooms: 2,
+                area: 1800,
+                image: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800',
+                featured: false
+            },
+            {
+                id: '6',
+                title: 'Contemporary Loft',
+                type: 'residential',
+                price: 890000,
+                location: 'Williamsburg, Brooklyn',
+                bedrooms: 2,
+                bathrooms: 2,
+                area: 1600,
+                image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800',
+                featured: false
+            }
+        ];
+
+        let filteredProperties = [...allProperties];
+
+        // Format Price
+        function formatPrice(price) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+            }).format(price);
+        }
+
+        // Render Properties
+        function renderProperties(properties) {
+            const container = document.getElementById('propertiesGrid');
+            const resultsCount = document.getElementById('resultsCount');
+            
+            resultsCount.textContent = `${properties.length} Properties Found`;
+            
+            if (properties.length === 0) {
+                container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 3rem; color: #4b5563;">No properties found matching your criteria.</p>';
+                return;
+            }
+
+            container.innerHTML = properties.map(property => `
+                <a href="property-detail.html?id=${property.id}" style="text-decoration: none; color: inherit;">
+                    <div class="property-card">
+                        <div class="property-image">
+                            <img src="${property.image}" alt="${property.title}">
+                            <div class="property-badges">
+                                <span class="badge ${property.type === 'residential' ? 'badge-residential' : 'badge-commercial'}">
+                                    ${property.type === 'residential' ? 'Residential' : 'Commercial'}
+                                </span>
+                                ${property.featured ? '<span class="badge badge-featured">Featured</span>' : ''}
+                            </div>
+                        </div>
+                        <div class="property-content">
+                            <div class="property-header">
+                                <h3 class="property-title">${property.title}</h3>
+                                <span class="property-price">${formatPrice(property.price)}</span>
+                            </div>
+                            <div class="property-location">
+                                <span>📍</span>
+                                <span>${property.location}</span>
+                            </div>
+                            <div class="property-features">
+                                ${property.bedrooms ? `
+                                    <div class="feature-item">
+                                        <span>🛏️</span>
+                                        <span>${property.bedrooms} Beds</span>
+                                    </div>
+                                ` : '<div></div>'}
+                                <div class="feature-item">
+                                    <span>🛁</span>
+                                    <span>${property.bathrooms} Baths</span>
+                                </div>
+                                <div class="feature-item">
+                                    <span>📐</span>
+                                    <span>${property.area} sqft</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        // Apply Filters
+        function applyFilters() {
+            const type = document.getElementById('filterType').value;
+            const location = document.getElementById('filterLocation').value.toLowerCase();
+            const minPrice = parseInt(document.getElementById('filterMinPrice').value) || 0;
+            const maxPrice = parseInt(document.getElementById('filterMaxPrice').value) || Infinity;
+            const bedrooms = document.getElementById('filterBedrooms').value;
+
+            filteredProperties = allProperties.filter(property => {
+                // Type filter
+                if (type !== 'all' && property.type !== type) return false;
+                
+                // Location filter
+                if (location && !property.location.toLowerCase().includes(location)) return false;
+                
+                // Price filter
+                if (property.price < minPrice || property.price > maxPrice) return false;
+                
+                // Bedrooms filter
+                if (bedrooms !== 'any') {
+                    const minBeds = parseInt(bedrooms);
+                    if (!property.bedrooms || property.bedrooms < minBeds) return false;
+                }
+                
+                return true;
+            });
+
+            renderProperties(filteredProperties);
+        }
+
+        // Reset Filters
+        function resetFilters() {
+            document.getElementById('filterType').value = 'all';
+            document.getElementById('filterLocation').value = '';
+            document.getElementById('filterMinPrice').value = '';
+            document.getElementById('filterMaxPrice').value = '';
+            document.getElementById('filterBedrooms').value = 'any';
+            document.getElementById('sortBy').value = 'default';
+            
+            filteredProperties = [...allProperties];
+            renderProperties(filteredProperties);
+        }
+
+        // Sort Properties
+        function sortProperties() {
+            const sortBy = document.getElementById('sortBy').value;
+            
+            switch(sortBy) {
+                case 'price-low':
+                    filteredProperties.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProperties.sort((a, b) => b.price - a.price);
+                    break;
+                case 'area':
+                    filteredProperties.sort((a, b) => b.area - a.area);
+                    break;
+                default:
+                    filteredProperties = [...allProperties];
+            }
+            
+            renderProperties(filteredProperties);
+        }
+
+        // Toggle Mobile Menu
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProperties(filteredProperties);
+        });
+    </script>
+</body>
+</html>
