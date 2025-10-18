@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Agents - EstateHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .navbar-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+
+        .logo:hover .logo-icon {
+            transform: scale(1.05);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #059669, #0d9488);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #374151;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover {
+            background: #f3f4f6;
+        }
+
+        .nav-link.active {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .cta-button {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(to right, #10b981, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        /* Page Header */
+        .page-header {
+            padding: 120px 1.5rem 60px;
+            background: linear-gradient(135deg, #d1fae5, #ccfbf1, #cffafe);
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.25rem;
+            color: #4b5563;
+        }
+
+        /* Agents Section */
+        .agents-section {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 4rem 1.5rem;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .agent-image {
+            height: 320px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .agent-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s;
+        }
+
+        .agent-card:hover .agent-image img {
+            transform: scale(1.1);
+        }
+
+        .agent-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 2rem 1.5rem 1rem;
+            color: white;
+        }
+
+        .agent-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .agent-role {
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .agent-content {
+            padding: 1.5rem;
+        }
+
+        .agent-bio {
+            color: #4b5563;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .agent-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #059669;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .agent-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+
+        .contact-button {
+            margin-top: 0.5rem;
+            padding: 0.75rem;
+            background: linear-gradient(to right, #10b981, #14b8a6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .contact-button:hover {
+            background: linear-gradient(to right, #059669, #0d9488);
+            transform: translateY(-2px);
+        }
+
+        /* Why Choose Section */
+        .why-choose {
+            background: #f9fafb;
+            padding: 5rem 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .why-choose-content {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: #4b5563;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .benefit-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .benefit-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-card h3 {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-card p {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111827;
+            color: #d1d5db;
+            padding: 3rem 1.5rem 2rem;
+        }
+
+        .footer-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981, #14b8a6);
+            border-radius: 8px;
+        }
+
+        .footer-logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .footer h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #10b981;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            border-top: 1px solid #374151;
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .mobile-menu.active {
+                display: block;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-nav-link {
+                display: block;
+                padding: 0.75rem 1rem;
+                margin-bottom: 0.5rem;
+                border-radius: 8px;
+                text-decoration: none;
+                color: #374151;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .agents-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .benefits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="estatehub.html" class="logo">
+                <div class="logo-icon">
+                    <svg style="width: 24px; height: 24px; fill: white;" viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="white" stroke-width="2" fill="none"/>
+                        <path d="M3 9h18M9 21V9" stroke="white" stroke-width="2"/>
+                    </svg>
+                </div>
+                <span class="logo-text">EstateHub</span>
+            </a>
+            <div class="nav-links">
+                <a href="estatehub.html" class="nav-link">Home</a>
+                <a href="properties.html" class="nav-link">Properties</a>
+                <a href="agents.html" class="nav-link active">Agents</a>
+                <button class="cta-button">List Property</button>
+            </div>
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="3" y1="12" x2="21" y2="12"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <line x1="3" y1="18" x2="21" y2="18"/>
+                </svg>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="estatehub.html" class="mobile-nav-link">Home</a>
+            <a href="properties.html" class="mobile-nav-link">Properties</a>
+            <a href="agents.html" class="mobile-nav-link">Agents</a>
+            <button class="cta-button" style="width: 100%; margin-top: 0.5rem;">List Property</button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Meet Our Expert Agents</h1>
+        <p>Professional guidance from experienced real estate experts</p>
+    </section>
+
+    <!-- Agents Grid -->
+    <section class="agents-section">
+        <div class="agents-grid" id="agentsGrid">
+            <!-- Agents will be rendered by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Why Choose Our Agents -->
+    <section class="why-choose">
+        <div class="why-choose-content">
+            <div class="section-header">
+                <h2>Why Work With Our Agents?</h2>
+                <p>Experience the difference professional expertise makes</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Local Expertise</h3>
+                    <p>Deep knowledge of neighborhoods and market trends</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🤝</div>
+                    <h3>Personalized Service</h3>
+                    <p>Tailored approach to meet your unique needs</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📊</div>
+                    <h3>Proven Results</h3>
+                    <p>Track record of successful transactions</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">⏱️</div>
+                    <h3>24/7 Support</h3>
+                    <p>Always available when you need assistance</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <div class="footer-brand">
+                    <div class="footer-logo-icon"></div>
+                    <span class="footer-logo-text">EstateHub</span>
+                </div>
+                <p style="font-size: 0.875rem; margin-bottom: 1rem;">Your trusted partner in finding the perfect property.</p>
+            </div>
+            <div>
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="estatehub.html">Home</a></li>
+                    <li><a href="properties.html">Properties</a></li>
+                    <li><a href="agents.html">Agents</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Property Types</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Residential</a></li>
+                    <li><a href="#">Commercial</a></li>
+                    <li><a href="#">Luxury Estates</a></li>
+                    <li><a href="#">Office Spaces</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3>Contact Us</h3>
+                <ul class="footer-links">
+                    <li>📍 123 Real Estate Ave, New York, NY 10001</li>
+                    <li>📞 +1 (555) 123-4567</li>
+                    <li>✉️ info@estatehub.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 EstateHub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const agents = [
+            {
+                id: '1',
+                name: 'Sarah Mitchell',
+                role: 'Senior Real Estate Agent',
+                email: 'sarah.mitchell@realestate.com',
+                phone: '+1 (555) 123-4567',
+                image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400',
+                bio: 'With over 10 years of experience in luxury real estate, Sarah specializes in high-end residential and commercial properties.',
+                propertiesSold: 127,
+                rating: 4.9
+            },
+            {
+                id: '2',
+                name: 'Michael Chen',
+                role: 'Luxury Property Specialist',
+                email: 'michael.chen@realestate.com',
+                phone: '+1 (555) 234-5678',
+                image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
+                bio: 'Michael brings expertise in waterfront and luxury estates, helping clients find their dream properties for over 8 years.',
+                propertiesSold: 95,
+                rating: 4.8
+            },
+            {
+                id: '3',
+                name: 'Emily Rodriguez',
+                role: 'Residential Property Expert',
+                email: 'emily.rodriguez@realestate.com',
+                phone: '+1 (555) 345-6789',
+                image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400',
+                bio: 'Emily focuses on family homes and residential properties, providing personalized service to help families find their perfect home.',
+                propertiesSold: 143,
+                rating: 5.0
+            }
+        ];
+
+        function renderAgents() {
+            const container = document.getElementById('agentsGrid');
+            
+            container.innerHTML = agents.map(agent => `
+                <div class="agent-card">
+                    <div class="agent-image">
+                        <img src="${agent.image}" alt="${agent.name}">
+                        <div class="agent-overlay">
+                            <div class="agent-name">${agent.name}</div>
+                            <div class="agent-role">${agent.role}</div>
+                        </div>
+                    </div>
+                    <div class="agent-content">
+                        <p class="agent-bio">${agent.bio}</p>
+                        
+                        <div class="agent-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">${agent.propertiesSold}</div>
+                                <div class="stat-label">Properties Sold</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">${agent.rating}</div>
+                                <div class="stat-label">Rating</div>
+                            </div>
+                        </div>
+                        
+                        <div class="agent-contact">
+                            <div class="contact-item">
+                                <span>📞</span>
+                                <span>${agent.phone}</span>
+                            </div>
+                            <div class="contact-item">
+                                <span>✉️</span>
+                                <span>${agent.email}</span>
+                            </div>
+                            <button class="contact-button" onclick="contactAgent('${agent.name}')">
+                                Contact ${agent.name.split(' ')[0]}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function contactAgent(agentName) {
+            alert(`Thank you for your interest! ${agentName} will contact you shortly.`);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', renderAgents);
+    </script>
+</body>
+</html>
